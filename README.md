@@ -4,6 +4,8 @@
 * 完全客户端调用，API Key  信息存储在本地，没有泄露风险
 * 当前支持 Open AI、 Claude、 Moonshot、文心一言
 
+线上预览链接：https://hive-translate.vercel.app/
+
 ![Screenshot](https://github.com/user-attachments/assets/0a9b69da-09bc-4216-8eae-d9d8c3c341d7)
 
 
