@@ -118,7 +118,7 @@ export default function Home() {
 
   return (
     <div className="container flex flex-col justify-center">
-      {showNotice ? <div className="container flex flex-row mt-4 justify-center">
+      {showNotice ? <div className="container flex flex-row mt-4 justify-center px-4 md:px-0">
         <Alert
           className='w-full max-w-screen-xl align-middle'
           message={<span>尚未设置任何翻译服务，<Link href='/settings/providers'>点此设置</Link></span>}
