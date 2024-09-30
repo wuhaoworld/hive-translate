@@ -1,0 +1,233 @@
+'use client'
+import { Select, Input, message, Alert } from 'antd';
+const { TextArea } = Input;
+import Link from 'next/link';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import { SwapOutlined, PlusOutlined, HolderOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
+import React, { useState, useRef, useEffect } from 'react';
+import MoonshotTranslater from '@/app/adapter/moonshot/translater';
+import OpenaiTranslater from '@/app/adapter/openai/translater';
+import ClaudeTranslater from '@/app/adapter/claude/translater';
+import YiyanTranslater from '@/app/adapter/yiyan/translater';
+export default function Home() {
+  const [messageApi, contextHolder] = message.useMessage();
+  const [showNotice, setShowNotice] = useState(false);
+  const [inputText, setInputText] = useState('');
+  const [selectedFromLanguage, setSelectedFromLanguage] = useState('Auto');
+  const [selectedToLanguage, setSelectedToLanguage] = useState('Simplified Chinese');
+
+  const [isLoading, setIsLoading] = useState(false);
+  const openaiRef = useRef();
+  const claudeRef = useRef();
+  const moonshotRef = useRef();
+  const yiyanRef = useRef();
+  const handleInputTextChange = (value: string) => {
+    setInputText(value)
+  };
+
+  const clearInput = () => {
+    setInputText('');
+  }
+
+  const handlePaste = async () => {
+    try {
+      const text = await navigator.clipboard.readText(); // 读取剪贴板内容
+      setInputText(text); // 将内容设置到输入框
+    } catch (err) {
+      messageApi.error('读取剪贴板失败，请手动粘贴');
+    }
+  };
+  const startTranslate = () => {
+    if (!inputText) {
+      return;
+    }
+    setIsLoading(true);
+    if (openaiRef.current) {
+      (openaiRef.current as any).startTranslate(selectedFromLanguage, selectedToLanguage, inputText, () => { setIsLoading(false); });
+    }
+    if (claudeRef.current) {
+      (claudeRef.current as any).startTranslate(selectedFromLanguage, selectedToLanguage, inputText, () => { setIsLoading(false); });
+    }
+    if (moonshotRef.current) {
+      (moonshotRef.current as any).startTranslate(selectedFromLanguage, selectedToLanguage, inputText, () => { setIsLoading(false); });
+    }
+    if (yiyanRef.current) {
+      (yiyanRef.current as any).startTranslate(selectedFromLanguage, selectedToLanguage, inputText, () => { setIsLoading(false); });
+    }
+  }
+
+
+  const handleFromLanguage = (value: React.SetStateAction<string>) => {
+    setSelectedFromLanguage(value)
+  }
+
+  const handleToLanguage = (value: React.SetStateAction<string>) => {
+    setSelectedToLanguage(value)
+  }
+
+  const [providers, setProviders] = useState([
+    { id: 'openai', provider: OpenaiTranslater, ref: openaiRef },
+    { id: 'claude', provider: ClaudeTranslater, ref: claudeRef },
+    { id: 'moonshot', provider: MoonshotTranslater, ref: moonshotRef },
+    { id: 'yiyan', provider: YiyanTranslater, ref: yiyanRef },
+  ]);
+
+  const [localProviders, setLocalProviders] = useState(providers);
+  useEffect(() => {
+    const localSavedProvidersString = localStorage.getItem('localSavedProviders');
+    let localSavedProviders: string[];
+    try {
+      localSavedProviders = JSON.parse(localSavedProvidersString || '[]');
+    } catch (e) {
+      localSavedProviders = [];
+    }
+    if (localSavedProviders.length > 0) {
+      const filteredArr = localSavedProviders
+        .map((item: any) => providers.find(provider => provider.id === item))
+        .filter(item => item !== undefined); // 过滤掉 undefined
+      setLocalProviders(filteredArr);
+    }
+  }, [providers]);
+
+  useEffect(() => {
+    if (
+      localStorage.getItem('claude_status') === 'true' ||
+      localStorage.getItem('moonshot_status') === 'true' ||
+      localStorage.getItem('openai_status') === 'true' ||
+      localStorage.getItem('yiyan_status') === 'true') {
+      setShowNotice(false);
+    } else {
+      setShowNotice(true);
+    }
+  }, []);
+
+  const onDragEnd = (result: any) => {
+    if (!result.destination) {
+      return;
+    }
+    const newItems = Array.from(localProviders);
+    const [reorderedItem] = newItems.splice(result.source.index, 1);
+    newItems.splice(result.destination.index, 0, reorderedItem);
+    const localSavedProviders = newItems.map((i) => {
+      return i.id;
+    });
+    localStorage.setItem('localSavedProviders', JSON.stringify(localSavedProviders));
+    setLocalProviders(newItems);
+  };
+
+  return (
+    <div className="container flex flex-col justify-center">
+      {showNotice ? <div className="container flex flex-row mt-4 justify-center">
+        <Alert
+          className='w-full max-w-screen-xl align-middle'
+          message={<span>尚未设置任何翻译服务，<Link href='/settings/providers'>点此设置</Link></span>}
+          type="warning"
+          closable
+        />
+      </div> : ''}
+      <div className="container flex flex-row justify-center">
+        {contextHolder}
+        <div className='container max-w-screen-xl mb-8'>
+          <h2 className="mt-4 text-xl transition-colors mx-4 md:mx-0">AI 翻译</h2>
+          <div className="grid mt-4 md:grid-cols-2 md:mx-0 md:gap-4 grid-cols-1 gap-0 mx-4">
+            <div>
+              <div className='flex flex-row'>
+                <Select
+                  defaultValue="Auto"
+                  size='large'
+                  id='fromLanguage'
+                  className='w-0 flex-grow'
+                  onChange={handleFromLanguage}
+                  options={[
+                    { value: 'Auto', label: '自动识别' },
+                    { value: 'English', label: 'English' },
+                    { value: 'Simplified Chinese', label: '中文（简体）' },
+                    { value: 'Traditional Chinese', label: '中文（繁体）' },
+                    { value: 'Japanese', label: '日文' },
+                    { value: 'Korean', label: '韩语' },
+                    { value: 'French', label: '法语' },
+                    { value: 'German', label: '德语' },
+                    { value: 'Spanish', label: '西班牙语' },
+                  ]}
+                />
+                <SwapOutlined className='mx-2' />
+                <Select
+                  defaultValue="Simplified Chinese"
+                  id='toLanguage'
+                  size='large'
+                  className='w-0 flex-grow'
+                  onChange={handleToLanguage}
+                  options={[
+                    { value: 'Simplified Chinese', label: '中文（简体）' },
+                    { value: 'Traditional Chinese', label: '中文（繁体）' },
+                    { value: 'English', label: 'English' },
+                    { value: 'Japanese', label: '日文' },
+                    { value: 'Korean', label: '韩语' },
+                    { value: 'French', label: '法语' },
+                    { value: 'German', label: '德语' },
+                    { value: 'Spanish', label: '西班牙语' },
+                  ]}
+                />
+              </div>
+              <div className='mt-4'>
+                <TextArea
+                  style={{ paddingTop: '0.5em' }}
+                  className='leading-4'
+                  value={inputText}
+                  name='inputText'
+                  onChange={(e) => handleInputTextChange(e.target.value)}
+                  rows={14} />
+              </div>
+              <div className='mt-4 flex justify-between'>
+                <div>
+                  <Button onClick={handlePaste}>粘贴</Button>
+                  <Button className='ml-4' onClick={clearInput}>清空</Button>
+                </div>
+                <Button type='primary' loading={isLoading} onClick={startTranslate}>翻译</Button>
+              </div>
+            </div>
+            <div>
+              <div className='mt-6 md:mt-0'>
+                <DragDropContext onDragEnd={onDragEnd}>
+                  <Droppable droppableId="list">
+                    {(provided) => (
+                      <ul {...provided.droppableProps} ref={provided.innerRef}>
+                        {localProviders.map((item, index) => (
+                          <Draggable key={item.id} draggableId={item.id} index={index}>
+                            {(provided) => (
+                              <div
+                                className='flex flex-row w-full'
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                style={{
+                                  margin: '0 0 12px 0',
+                                  ...provided.draggableProps.style
+                                }}
+                              >
+                                <div>
+                                  <HolderOutlined style={{
+                                    color: '#ccc',
+                                  }} className='flex-grow-0 mt-4 mr-1 hover:cursor-move hover:text-gray-800'{...provided.dragHandleProps} />
+                                </div>
+                                <div className='flex flex-grow w-0'>
+                                  {<item.provider ref={item.ref} />}
+                                </div>
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </ul>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
