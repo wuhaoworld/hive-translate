@@ -28,6 +28,8 @@ export class CladueApi implements LLMApi {
         },
         body: JSON.stringify({
           "stream": true,
+          "anthropic-version": "2023-06-01",
+          'max_tokens': 2048,
           "model": `${options.config.model}`,
           "messages": options.messages,
         })

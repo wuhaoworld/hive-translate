@@ -17,14 +17,12 @@ export function translate(
   let messages: RequestMessage[];
   if (fromLanguage.toLowerCase() === 'auto') {
     messages = [
-      { 'role': 'system', 'content': `You are a professional, authentic machine translation engine.` },
       {
         'role': 'user', 'content': `Translate the following source text to ${toLanguage}, Output translation directly without any additional text.
 Source Text: ${text}
 Translated Text:` }]
   } else {
     messages = [
-      { 'role': 'system', 'content': `You are a professional, authentic machine translation engine.` },
       {
         'role': 'user', 'content': `Translate the following source text from ${fromLanguage} to ${toLanguage}, Output translation directly without any additional text.
 Source Text: ${text}.  
