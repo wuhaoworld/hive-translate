@@ -3,7 +3,7 @@ import { Select, Input, message, Alert } from 'antd';
 const { TextArea } = Input;
 import Link from 'next/link';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import { SwapOutlined, PlusOutlined, HolderOutlined } from '@ant-design/icons';
+import { SwapOutlined, HolderOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import React, { useState, useRef, useEffect } from 'react';
 import MoonshotTranslater from '@/app/adapter/moonshot/translater';
@@ -116,6 +116,21 @@ export default function Home() {
     setLocalProviders(newItems);
   };
 
+  const swapLanguage = () => {
+    if (selectedFromLanguage === 'Auto' && selectedToLanguage === 'Simplified Chinese') {
+      setSelectedFromLanguage('Simplified Chinese');
+      setSelectedToLanguage('English');
+      return;
+    } else if (selectedFromLanguage === 'Auto') {
+      setSelectedFromLanguage(selectedToLanguage);
+      setSelectedToLanguage('Simplified Chinese');
+    } else {
+      const temp = selectedFromLanguage;
+      setSelectedFromLanguage(selectedToLanguage);
+      setSelectedToLanguage(temp);
+    }
+  }
+
   return (
     <div className="container flex flex-col justify-center">
       {showNotice ? <div className="container flex flex-row mt-4 justify-center px-4 md:px-0">
@@ -135,6 +150,7 @@ export default function Home() {
               <div className='flex flex-row'>
                 <Select
                   defaultValue="Auto"
+                  value={selectedFromLanguage}
                   size='large'
                   id='fromLanguage'
                   className='w-0 flex-grow'
@@ -151,9 +167,10 @@ export default function Home() {
                     { value: 'Spanish', label: '西班牙语' },
                   ]}
                 />
-                <SwapOutlined className='mx-2' />
+                <SwapOutlined  className='mx-2' onClick={swapLanguage} />
                 <Select
                   defaultValue="Simplified Chinese"
+                  value={selectedToLanguage}
                   id='toLanguage'
                   size='large'
                   className='w-0 flex-grow'
