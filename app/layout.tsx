@@ -1,5 +1,6 @@
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import type { Metadata } from "next";
+import { Analytics } from '@vercel/analytics/react';
 import { Header } from '@/components/header'
 import "./globals.css";
 
@@ -27,6 +28,7 @@ export default function RootLayout({
             </div>
           </div>
         </AntdRegistry>
+        <Analytics />
       </body>
     </html>
   );
