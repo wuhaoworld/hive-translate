@@ -21,8 +21,7 @@ RUN npm run build
 ENV NODE_ENV production
 
 # 暴露应用运行的端口
-# EXPOSE 3000
-EXPOSE 80
+EXPOSE 3000
 
 # 启动 Next.js 应用
 CMD ["npm", "start"]
