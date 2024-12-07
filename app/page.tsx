@@ -3,7 +3,7 @@ import { Select, Input, message, Alert } from 'antd';
 const { TextArea } = Input;
 import Link from 'next/link';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import { SwapOutlined, HolderOutlined } from '@ant-design/icons';
+import { SwapOutlined, HolderOutlined, CloseOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import React, { useState, useRef, useEffect } from 'react';
 import MoonshotTranslater from '@/app/adapter/moonshot/translater';
@@ -131,6 +131,15 @@ export default function Home() {
     }
   }
 
+  const HideProvider = (providerId: string) => {
+    const filteredArr = localProviders.filter(item => item.id !== providerId);
+    setLocalProviders(filteredArr);
+    const localSavedProvidersString = filteredArr.map((i) => {
+      return i.id;
+    });
+    localStorage.setItem('localSavedProviders', JSON.stringify(localSavedProvidersString));
+  }
+
   return (
     <div className="container flex flex-col justify-center">
       {showNotice ? <div className="container flex flex-row mt-4 justify-center px-4 md:px-0">
@@ -167,7 +176,11 @@ export default function Home() {
                     { value: 'Spanish', label: '西班牙语' },
                   ]}
                 />
-                <SwapOutlined  className='mx-2' onClick={swapLanguage} />
+                <Button
+                  className='flex-grow-0 m-2'
+                  type='text'
+                  onClick={swapLanguage}
+                  icon={<SwapOutlined style={{ color: '#ccc', }} />} size='small' />
                 <Select
                   defaultValue="Simplified Chinese"
                   value={selectedToLanguage}
@@ -229,6 +242,15 @@ export default function Home() {
                                 </div>
                                 <div className='flex flex-grow w-0'>
                                   {<item.provider ref={item.ref} />}
+                                </div>
+                                <div className=''>
+                                  <Button
+                                    className='flex-grow-0 ml-1 mt-3'
+                                    type='text'
+                                    onClick={() => {
+                                      HideProvider(item.id)
+                                    }}
+                                    icon={<CloseOutlined style={{ color: '#ccc', }} />} size='small' />
                                 </div>
                               </div>
                             )}
