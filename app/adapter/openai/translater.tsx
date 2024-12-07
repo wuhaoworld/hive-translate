@@ -86,7 +86,7 @@ const OpenaiTranslater = forwardRef((props, ref) => {
     </CopyToClipboard>
   </div>;
   const label = <div className='flex flex-row items-center'>
-    <Image src={openaiLogo} className='border rounded-full p-1 mr-2' width={26} height={26} alt='a' />
+    <Image src={openaiLogo} className='border rounded-full p-1 mr-2' width={26} height={26} alt='openai' />
     <span>Open AI</span>
     {savedModel.displayName==='' ? '' : <span className='text-gray-400 ml-2'>({savedModel.displayName})</span>}
   </div>;

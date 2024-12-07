@@ -1,7 +1,8 @@
 'use client'
-import { Select, Input, message, Alert } from 'antd';
+import { Select, Input, message, Alert, Popover } from 'antd';
 const { TextArea } = Input;
 import Link from 'next/link';
+import Image from 'next/image';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { SwapOutlined, HolderOutlined, CloseOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
@@ -10,6 +11,12 @@ import MoonshotTranslater from '@/app/adapter/moonshot/translater';
 import OpenaiTranslater from '@/app/adapter/openai/translater';
 import ClaudeTranslater from '@/app/adapter/claude/translater';
 import YiyanTranslater from '@/app/adapter/yiyan/translater';
+
+import openaiLogo from '@/app/images/providers/openai.png';
+import yiyanLogo from '@/app/images/providers/yiyan.svg';
+import claudeLogo from '@/app/images/providers/claude.png';
+import moonshotLogo from '@/app/images/providers/moonshot.png';
+
 export default function Home() {
   const [messageApi, contextHolder] = message.useMessage();
   const [showNotice, setShowNotice] = useState(false);
@@ -67,13 +74,15 @@ export default function Home() {
   }
 
   const [providers, setProviders] = useState([
-    { id: 'openai', provider: OpenaiTranslater, ref: openaiRef },
-    { id: 'claude', provider: ClaudeTranslater, ref: claudeRef },
-    { id: 'moonshot', provider: MoonshotTranslater, ref: moonshotRef },
-    { id: 'yiyan', provider: YiyanTranslater, ref: yiyanRef },
+    { id: 'openai', DisplayName: 'Open AI', logo: openaiLogo, provider: OpenaiTranslater, ref: openaiRef },
+    { id: 'claude', DisplayName: 'Claude', logo: claudeLogo, provider: ClaudeTranslater, ref: claudeRef },
+    { id: 'moonshot', DisplayName: 'Moonshot', logo: moonshotLogo, provider: MoonshotTranslater, ref: moonshotRef },
+    { id: 'yiyan', DisplayName: '百度千帆/文心一言', logo: yiyanLogo, provider: YiyanTranslater, ref: yiyanRef },
   ]);
 
   const [localProviders, setLocalProviders] = useState(providers);
+  const [toAddProviders, setToAddProviders] = useState(providers);
+
   useEffect(() => {
     const localSavedProvidersString = localStorage.getItem('localSavedProviders');
     let localSavedProviders: string[];
@@ -89,6 +98,11 @@ export default function Home() {
       setLocalProviders(filteredArr);
     }
   }, [providers]);
+
+  useEffect(() => {
+    const toAddProvidersArr = providers.filter(item => !localProviders.some(local => local.id === item.id));
+    setToAddProviders(toAddProvidersArr);
+  }, [localProviders, providers]);
 
   useEffect(() => {
     if (
@@ -138,6 +152,22 @@ export default function Home() {
       return i.id;
     });
     localStorage.setItem('localSavedProviders', JSON.stringify(localSavedProvidersString));
+  }
+  const handleAddProvider = (providerId: string) => {
+    const exits = localProviders.some((currentValue) => {
+      return providerId === currentValue.id;
+    })
+    if (exits) return;
+    const toAddProvider = providers.find((item) => {
+      return item.id === providerId;
+    })
+    if (toAddProvider) {
+      const localSavedProvidersString = localProviders.map((i) => {
+        return i.id;
+      });
+      localStorage.setItem('localSavedProviders', JSON.stringify([...localSavedProvidersString, providerId]));
+      setLocalProviders((m) => ([...m, toAddProvider]));
+    }
   }
 
   return (
@@ -218,7 +248,30 @@ export default function Home() {
               </div>
             </div>
             <div>
-              <div className='mt-6 md:mt-0'>
+              <div className='mt-6 md:-mt-10'>
+                <div className='flex flex-row-reverse h-10 flex-end'>
+                  <Popover placement="bottomRight"
+                    trigger="click"
+                    content={
+                      <div className='w-44'>
+                        {
+                          toAddProviders.length === 0 && <span className='text-gray-500'>已全部添加</span>
+                        }
+                        {toAddProviders.length > 0 &&
+                          toAddProviders.map((item, index) => (
+                            <div key={item.id}
+                              onClick={() => { handleAddProvider(item.id) }}
+                              className='flex flex-row hover:bg-gray-100 rounded-lg p-2 items-center cursor-pointer'>
+                              <Image src={item.logo} className='border rounded-full p-1 mr-2' width={26} height={26} alt='openai' />
+                              <span>{item.DisplayName}</span>
+                            </div>
+                          )
+                          )
+                        }
+                      </div>} arrow={false}>
+                    <Button type='link' className='mr-3'>添加翻译服务</Button>
+                  </Popover>
+                </div>
                 <DragDropContext onDragEnd={onDragEnd}>
                   <Droppable droppableId="list">
                     {(provided) => (
