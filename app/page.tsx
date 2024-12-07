@@ -80,7 +80,7 @@ export default function Home() {
     { id: 'yiyan', DisplayName: '百度千帆/文心一言', logo: yiyanLogo, provider: YiyanTranslater, ref: yiyanRef },
   ]);
 
-  const [localProviders, setLocalProviders] = useState(providers);
+  const [localProviders, setLocalProviders] = useState<typeof providers>([]);
   const [toAddProviders, setToAddProviders] = useState(providers);
 
   useEffect(() => {
