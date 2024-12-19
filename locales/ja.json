@@ -1,0 +1,43 @@
+{
+  "Common": {
+    "settings": "設定"
+  },
+  "HomePage": {
+    "meta-description": "最も使いやすいAI翻訳ツール",
+    "aiTranslate": "AI翻訳",
+    "paste": "貼り付け",
+    "clear": "クリア",
+    "translate": "翻訳",
+    "addProvider": "翻訳サービスを追加",
+    "resultPlaceholder": "翻訳結果はここに表示されます",
+    "copy": "コピー",
+    "copied": "コピーしました",
+    "please": "お願いします",
+    "config": "設定",
+    "noProviderNotice": "まだ翻訳サービスが設定されていません、",
+    "clickHere": "ここをクリックして設定"
+  },
+  "Settings": {
+    "modelSettings": "モデル設定",
+    "status": "有効にする",
+    "enabled": "有効になりました",
+    "disabled": "無効になりました",
+    "endpoint": "中継アドレス",
+    "optional": "選択入力",
+    "defaultModel": "翻訳時にデフォルトで使用されるモデル",
+    "configGuide": "設定ガイドを表示",
+    "save": "保存",
+    "cancel": "キャンセル"
+  },
+  "Language": {
+    "auto": "自動認識",
+    "english": "English",
+    "simplifiedChinese": "中国語（簡体字）",
+    "traditionalChinese": "中国語（繁体字）",
+    "japanese": "日本語",
+    "korean": "韓国語",
+    "french": "フランス語",
+    "german": "ドイツ語",
+    "spanish": "スペイン語"
+  }
+}

@@ -3,7 +3,7 @@ import { headers } from 'next/headers';
 
 export default getRequestConfig(async () => {
 
-  const locales = ['en', 'zh'];
+  const locales = ['en', 'zh', 'ja'];
   const defaultLocale = 'en';
 
   const headersList = headers();
