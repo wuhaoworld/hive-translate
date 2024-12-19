@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { SwapOutlined, HolderOutlined, CloseOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
-import {useTranslations} from 'next-intl';
+import { useTranslations } from 'next-intl';
 import React, { useState, useRef, useEffect } from 'react';
 import MoonshotTranslater from '@/app/adapter/moonshot/translater';
 import OpenaiTranslater from '@/app/adapter/openai/translater';
@@ -20,6 +20,7 @@ import moonshotLogo from '@/app/images/providers/moonshot.png';
 
 export default function Home() {
   const t = useTranslations('HomePage');
+  const l = useTranslations('Language');
   const [messageApi, contextHolder] = message.useMessage();
   const [showNotice, setShowNotice] = useState(false);
   const [inputText, setInputText] = useState('');
@@ -114,9 +115,10 @@ export default function Home() {
       localStorage.getItem('yiyan_status') === 'true') {
       setShowNotice(false);
     } else {
+      setLocalProviders(providers);
       setShowNotice(true);
     }
-  }, []);
+  }, [providers]);
 
   const onDragEnd = (result: any) => {
     if (!result.destination) {
@@ -177,7 +179,7 @@ export default function Home() {
       {showNotice ? <div className="container flex flex-row mt-4 justify-center px-4 md:px-0">
         <Alert
           className='w-full max-w-screen-xl align-middle'
-          message={<span>尚未设置任何翻译服务，<Link href='/settings/providers'>点此设置</Link></span>}
+          message={<span>{t('noProviderNotice')}<Link href='/settings/providers'>{t('clickHere')}</Link></span>}
           type="warning"
           closable
         />
@@ -197,15 +199,15 @@ export default function Home() {
                   className='w-0 flex-grow'
                   onChange={handleFromLanguage}
                   options={[
-                    { value: 'Auto', label: '自动识别' },
-                    { value: 'English', label: 'English' },
-                    { value: 'Simplified Chinese', label: '中文（简体）' },
-                    { value: 'Traditional Chinese', label: '中文（繁体）' },
-                    { value: 'Japanese', label: '日文' },
-                    { value: 'Korean', label: '韩语' },
-                    { value: 'French', label: '法语' },
-                    { value: 'German', label: '德语' },
-                    { value: 'Spanish', label: '西班牙语' },
+                    { value: 'Auto', label: l('auto') },
+                    { value: 'English', label: l('english') },
+                    { value: 'Simplified Chinese', label: l('simplifiedChinese') },
+                    { value: 'Traditional Chinese', label: l('traditionalChinese') },
+                    { value: 'Japanese', label: l('japanese') },
+                    { value: 'Korean', label: l('korean') },
+                    { value: 'French', label: l('french') },
+                    { value: 'German', label: l('german') },
+                    { value: 'Spanish', label: l('spanish') },
                   ]}
                 />
                 <Button
@@ -221,14 +223,14 @@ export default function Home() {
                   className='w-0 flex-grow'
                   onChange={handleToLanguage}
                   options={[
-                    { value: 'Simplified Chinese', label: '中文（简体）' },
-                    { value: 'Traditional Chinese', label: '中文（繁体）' },
-                    { value: 'English', label: 'English' },
-                    { value: 'Japanese', label: '日文' },
-                    { value: 'Korean', label: '韩语' },
-                    { value: 'French', label: '法语' },
-                    { value: 'German', label: '德语' },
-                    { value: 'Spanish', label: '西班牙语' },
+                    { value: 'Simplified Chinese', label: l('simplifiedChinese') },
+                    { value: 'Traditional Chinese', label: l('traditionalChinese') },
+                    { value: 'English', label: l('english') },
+                    { value: 'Japanese', label: l('japanese') },
+                    { value: 'Korean', label: l('korean') },
+                    { value: 'French', label: l('french') },
+                    { value: 'German', label: l('german') },
+                    { value: 'Spanish', label: l('spanish') },
                   ]}
                 />
               </div>

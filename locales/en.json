@@ -1,31 +1,43 @@
 {
-    "Common": {
-        "settings": "Settings"
-    },
-    "HomePage": {
-        "meta-description": "The best AI translation tool",
-        "aiTranslate": "AI Translate",
-        "paste": "Paste",
-        "clear": "Clear",
-        "translate": "Translate",
-        "addProvider": "Add Translation Provider",
-        "resultPlaceholder": "The translation results will be displayed here.",
-        "copy": "Copy",
-        "copied": "Copied",
-        "please": "Please",
-        "config": "Config",
-        "farewell": "Goodbye"
-    },
-    "Settings": {
-        "modelSettings": "Model Settings",
-        "status": "Status",
-        "enabled": "Enabled",
-        "disabled": "Disabled",
-        "endpoint": "Endpoint",
-        "optional": "Optional",
-        "defaultModel": "Default Model",
-        "configGuide": "Configuration Guide",
-        "save": "Save",
-        "cancel": "Cancel"
-    }
+  "Common": {
+    "settings": "Settings"
+  },
+  "HomePage": {
+    "meta-description": "The best AI translation tool",
+    "aiTranslate": "AI Translate",
+    "paste": "Paste",
+    "clear": "Clear",
+    "translate": "Translate",
+    "addProvider": "Add Translation Provider",
+    "resultPlaceholder": "The translation results will be displayed here.",
+    "copy": "Copy",
+    "copied": "Copied",
+    "please": "Please",
+    "config": "Config",
+    "noProviderNotice": "No translation provider have been set up yet, ",
+    "clickHere": "Click here to set"
+  },
+  "Settings": {
+    "modelSettings": "Model Settings",
+    "status": "Status",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "endpoint": "Endpoint",
+    "optional": "Optional",
+    "defaultModel": "Default Model",
+    "configGuide": "Configuration Guide",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "Language": {
+    "auto": "Detect Language",
+    "english": "English",
+    "simplifiedChinese": "Simplified Chinese",
+    "traditionalChinese": "Traditional Chinese",
+    "japanese": "Japanese",
+    "korean": "Korean",
+    "french": "French",
+    "german": "German",
+    "spanish": "Spanish"
+  }
 }

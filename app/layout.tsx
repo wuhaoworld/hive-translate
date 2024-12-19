@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Analytics } from '@vercel/analytics/react';
 import { Header } from '@/components/header';
 import { NextIntlClientProvider } from 'next-intl';
-import {getLocale, getMessages} from 'next-intl/server';
+import { getLocale, getMessages } from 'next-intl/server';
 import "./globals.css";
 
 export const metadata: Metadata = {
