@@ -6,7 +6,8 @@ import Link from 'next/link';
 import { Button, Form, Input, Select, Switch, ConfigProvider, message } from 'antd';
 import logo from "./logo.png"
 import { modelList } from './models';
-import { addIfNotExists, removeIfExists } from '@/app/unils'
+import { addIfNotExists, removeIfExists } from '@/app/unils';
+import { useTranslations } from 'next-intl';
 
 type FormValues = {
   status: boolean;
@@ -16,6 +17,8 @@ type FormValues = {
 }
 
 const YiyanSettings = () => {
+  const c = useTranslations('Common');
+  const t = useTranslations('Settings');
   const [messageApi, contextHolder] = message.useMessage();
   const [yiyanStatus, setYiyanStatus] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -82,14 +85,14 @@ const YiyanSettings = () => {
         {yiyanStatus ?
           <>
             <div className='w-2 h-2 bg-green-500 rounded m-2'></div>
-            <span className='mr-4 text-sm'>已启用</span></>
+            <span className='mr-4 text-sm'>{t('enabled')}</span></>
           :
           <><div className='w-2 h-2 bg-gray-400 rounded m-2'></div>
-            <span className='mr-4 text-sm'>未启用</span>
+            <span className='mr-4 text-sm'>{t('disabled')}</span>
           </>}
-        <Button className='text-xs mr-2' onClick={showModal}>设置</Button>
+        <Button className='text-xs mr-2' onClick={showModal}>{c('settings')}</Button>
       </div>
-      <Modal title="设置文心一言/百度千帆"
+      <Modal title={`文心一言/百度千帆 ${c('settings')}`}
         okText='保存'
         cancelText='取消'
         open={isModalOpen}
@@ -102,7 +105,7 @@ const YiyanSettings = () => {
                 target='_blank'
                 href='https://k2swpw8zgf.feishu.cn/wiki/XWY0wh43qitPpfksWljcidBHnDn'
               >
-                查看设置引导
+                {t('configGuide')}
               </Link>
               {/* <Button
                 type="link"
@@ -113,10 +116,10 @@ const YiyanSettings = () => {
             </div>
             <div>
               <Button key="back" className='mr-2' onClick={handleCancel}>
-                取消
+                {t('cancel')}
               </Button>
               <Button key="submit" type="primary" onClick={handleOk}>
-                保存
+                {t('save')}
               </Button>
             </div>
           </div>
@@ -137,7 +140,7 @@ const YiyanSettings = () => {
             form={form}
             onFinish={onFinish}
           >
-            <Form.Item label="启用" name='status'>
+            <Form.Item label={t('status')} name='status'>
               <Switch defaultChecked={false} />
             </Form.Item>
             <Form.Item label="API Key" name='apikey'>
@@ -146,7 +149,7 @@ const YiyanSettings = () => {
             <Form.Item label="Secret Key" name='apisecret'>
               <Input />
             </Form.Item>
-            <Form.Item label="翻译时默认使用的模型" name='model'>
+            <Form.Item label={t('defaultModel')} name='model'>
               <Select
                 id='model'
                 className='w-0 flex-grow'

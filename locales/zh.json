@@ -1,0 +1,31 @@
+{
+    "Common": {
+        "settings": "设置"
+    },
+    "HomePage": {
+        "meta-description": "最好用的 AI 翻译工具",
+        "aiTranslate": "AI 翻译",
+        "paste": "粘贴",
+        "clear": "清空",
+        "translate": "翻译",
+        "addProvider": "添加翻译服务",
+        "resultPlaceholder": "翻译结果将展示在这里",
+        "copy": "复制",
+        "copied": "已复制",
+        "please": "请",
+        "config": "设置",
+        "farewell": "再见"
+    },
+    "Settings": {
+        "modelSettings": "模型设置",
+        "status": "启用",
+        "enabled": "已启用",
+        "disabled": "未启用",
+        "endpoint": "中转地址",
+        "optional": "选填",
+        "defaultModel": "翻译时默认使用的模型",
+        "configGuide": "查看设置引导",
+        "save": "保存",
+        "cancel": "取消"
+    }
+}

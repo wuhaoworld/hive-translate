@@ -10,9 +10,11 @@ import { Button, Skeleton, Collapse, theme, Tooltip } from 'antd';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { CopyOutlined } from '@ant-design/icons';
 import { modelList } from './models';
+import {useTranslations} from 'next-intl';
 
 const ClaudeTranslater = forwardRef((props, ref) => {
-  const [copyNotice, setCopyNotice] = useState('复制');
+  const t = useTranslations('HomePage');
+  const [copyNotice, setCopyNotice] = useState(t('copy'));
   const [activeKey, setActiveKey] = useState('');
   const [translatedText, setTranslatedText] = useState('');
   const [resultStatus, setResultStatus] = useState('init');
@@ -62,23 +64,23 @@ const ClaudeTranslater = forwardRef((props, ref) => {
   function ChildrenDisplay(status: string) {
     switch (status) {
       case 'init':
-        return <><p className='-mt-4 text-gray-400' >翻译结果将展示在这里</p>{contentFooter}</>;
+        return <><p className='-mt-4 text-gray-400' >{t('resultPlaceholder')}</p>{contentFooter}</>;
       case 'need_api_key':
-        return <><div>请先<Link href='/settings/providers' passHref legacyBehavior><Button type='link' className='w-2'> 设置 </Button></Link> API Key </div>{contentFooter}</>;
+        return <><div>{t('please')} <Link href='/settings/providers'><Button type='link' style={{ padding: '0' }}> {t('config')} </Button></Link> API Key </div>{contentFooter}</>;
       case 'loading':
         return <><Skeleton.Input style={{ width: '100%', height: '18px' }} active />{contentFooter}</>;
       case 'done':
         return <><div className='-mt-4 translate-result'><Markdown remarkPlugins={[remarkGfm]}>{translatedText}</Markdown></div>{contentFooter}</>;
       default:
-        return <><p className='-mt-4 text-gray-400' >翻译结果将展示在这里</p>{contentFooter}</>;
+        return <><p className='-mt-4 text-gray-400' >{t('resultPlaceholder')}</p>{contentFooter}</>;
     }
   }
 
   const contentFooter = <div className='flex flex-row-reverse text-md text-gray-400'>
     <CopyToClipboard text={translatedText} onCopy={() => {
-      setCopyNotice('已复制');
+      setCopyNotice(t('copied'));
       setTimeout(() => {
-        setCopyNotice('复制');
+        setCopyNotice(t('copy'));
       }, 2000);
     }}>
       <Tooltip title={copyNotice}>

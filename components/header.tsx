@@ -1,9 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link'
 import { Button } from 'antd';
+import {useTranslations} from 'next-intl';
 import { SettingOutlined } from '@ant-design/icons';
 import logo from '@/app/images/logo.svg';
 export function Header() {
+  const t = useTranslations('Common');
   return (
     <header className="sticky top-0 z-50 flex items-center justify-between w-full h-14 px-4 border-b bg-white shrink-0 backdrop-blur-xl">
       <div className="flex items-center">
@@ -16,7 +18,7 @@ export function Header() {
       </div>
       <div className="flex items-center justify-end space-x-2">
         <Link href={'/settings/providers'}>
-          <Button icon={<SettingOutlined />}>设置</Button>
+          <Button icon={<SettingOutlined />}>{t('settings')}</Button>
         </Link>
       </div>
     </header>

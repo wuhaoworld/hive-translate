@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { SwapOutlined, HolderOutlined, CloseOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
+import {useTranslations} from 'next-intl';
 import React, { useState, useRef, useEffect } from 'react';
 import MoonshotTranslater from '@/app/adapter/moonshot/translater';
 import OpenaiTranslater from '@/app/adapter/openai/translater';
@@ -18,6 +19,7 @@ import claudeLogo from '@/app/images/providers/claude.png';
 import moonshotLogo from '@/app/images/providers/moonshot.png';
 
 export default function Home() {
+  const t = useTranslations('HomePage');
   const [messageApi, contextHolder] = message.useMessage();
   const [showNotice, setShowNotice] = useState(false);
   const [inputText, setInputText] = useState('');
@@ -183,7 +185,7 @@ export default function Home() {
       <div className="container flex flex-row justify-center">
         {contextHolder}
         <div className='container max-w-screen-xl mb-8'>
-          <h2 className="mt-4 text-xl transition-colors mx-4 md:mx-0">AI 翻译</h2>
+          <h2 className="mt-4 text-xl transition-colors mx-4 md:mx-0">{t('aiTranslate')}</h2>
           <div className="grid mt-4 md:grid-cols-2 md:mx-0 md:gap-4 grid-cols-1 gap-0 mx-4">
             <div>
               <div className='flex flex-row'>
@@ -241,10 +243,10 @@ export default function Home() {
               </div>
               <div className='mt-4 flex justify-between'>
                 <div>
-                  <Button onClick={handlePaste}>粘贴</Button>
-                  <Button className='ml-4' onClick={clearInput}>清空</Button>
+                  <Button onClick={handlePaste}>{t('paste')}</Button>
+                  <Button className='ml-4' onClick={clearInput}>{t('clear')}</Button>
                 </div>
-                <Button type='primary' loading={isLoading} onClick={startTranslate}>翻译</Button>
+                <Button type='primary' loading={isLoading} onClick={startTranslate}>{t('translate')}</Button>
               </div>
             </div>
             <div>
@@ -269,7 +271,7 @@ export default function Home() {
                           )
                         }
                       </div>} arrow={false}>
-                    <Button type='link' className='mr-3'>添加翻译服务</Button>
+                    <Button type='link' className='mr-3'>{t('addProvider')}</Button>
                   </Popover>
                 </div>
                 <DragDropContext onDragEnd={onDragEnd}>

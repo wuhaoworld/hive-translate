@@ -1,34 +1,40 @@
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import type { Metadata } from "next";
 import { Analytics } from '@vercel/analytics/react';
-import { Header } from '@/components/header'
+import { Header } from '@/components/header';
+import { NextIntlClientProvider } from 'next-intl';
+import {getLocale, getMessages} from 'next-intl/server';
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "AI Translate",
-  description: "最好用的 AI 翻译工具",
+  description: "The best AI translation tool",
   icons: {
     icon: '/icon.png'
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
   return (
-    <html lang="Zh-cn">
+    <html lang={locale}>
       <body>
-        <AntdRegistry>
-          <div className="flex flex-col min-h-screen h-full bg-slate-100">
-            <Header />
-            <div className='flex w-full justify-center'>
-              {children}
+        <NextIntlClientProvider messages={messages}>
+          <AntdRegistry>
+            <div className="flex flex-col min-h-screen h-full bg-slate-100">
+              <Header />
+              <div className='flex w-full justify-center'>
+                {children}
+              </div>
             </div>
-          </div>
-        </AntdRegistry>
-        <Analytics />
+          </AntdRegistry>
+          <Analytics />
+        </NextIntlClientProvider>
       </body>
     </html>
   );

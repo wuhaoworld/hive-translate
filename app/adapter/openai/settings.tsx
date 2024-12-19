@@ -6,7 +6,8 @@ import { Modal } from 'antd';
 import { Button, Form, Input, Switch, ConfigProvider, message, Select } from 'antd';
 import logo from "./logo.svg";
 import { modelList } from './models';
-import { addIfNotExists, removeIfExists } from '@/app/unils'
+import { addIfNotExists, removeIfExists } from '@/app/unils';
+import { useTranslations } from 'next-intl';
 
 type FormValues = {
   status: boolean;
@@ -16,6 +17,8 @@ type FormValues = {
 }
 
 const OpenAiSettings = () => {
+  const c = useTranslations('Common');
+  const t = useTranslations('Settings');
   const [messageApi, contextHolder] = message.useMessage();
   const [openAiStatus, setOpenAiStatus] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -82,14 +85,14 @@ const OpenAiSettings = () => {
         {openAiStatus ?
           <>
             <div className='w-2 h-2 bg-green-500 rounded m-2'></div>
-            <span className='mr-4 text-sm'>已启用</span></>
+            <span className='mr-4 text-sm'>{t('enabled')}</span></>
           :
           <><div className='w-2 h-2 bg-gray-400 rounded m-2'></div>
-            <span className='mr-4 text-sm'>未启用</span>
+            <span className='mr-4 text-sm'>{t('disabled')}</span>
           </>}
-        <Button className='text-xs mr-2' onClick={showModal}>设置</Button>
+        <Button className='text-xs mr-2' onClick={showModal}>{c('settings')}</Button>
       </div>
-      <Modal title="设置 Open AI"
+      <Modal title={`Open AI ${c('settings')}`}
         okText='保存'
         cancelText='取消'
         open={isModalOpen}
@@ -102,15 +105,15 @@ const OpenAiSettings = () => {
                 target='_blank'
                 href='https://k2swpw8zgf.feishu.cn/wiki/J3FtwGumMi7k0vktB41cHvjTnTg'
               >
-                查看设置引导
+                {t('configGuide')}
               </Link>
             </div>
             <div>
               <Button key="back" className='mr-2' onClick={handleCancel}>
-                取消
+                {t('cancel')}
               </Button>
               <Button key="submit" type="primary" onClick={handleOk}>
-                保存
+              {t('save')}
               </Button>
             </div>
           </div>
@@ -131,16 +134,16 @@ const OpenAiSettings = () => {
             form={form}
             onFinish={onFinish}
           >
-            <Form.Item label="启用" name='status'>
+            <Form.Item label={t('status')} name='status'>
               <Switch defaultChecked={false} />
             </Form.Item>
             <Form.Item label="API Key" name='apikey'>
               <Input />
             </Form.Item>
-            <Form.Item label="中转地址(选填)" name='proxy_url'>
+            <Form.Item label={`${t('endpoint')} (${t('optional')})`} name='proxy_url'>
               <Input type='url' />
             </Form.Item>
-            <Form.Item label="翻译时默认使用的模型" name='model'>
+            <Form.Item label={t('defaultModel')} name='model'>
               <Select
                 id='model'
                 className='w-0 flex-grow'
